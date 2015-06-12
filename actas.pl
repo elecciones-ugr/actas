@@ -9,7 +9,7 @@ use HTML::TableExtract qw(tree);
 
 use Data::Dumper;
 
-my $html = shift @ARGV;
+my $html = shift || "actas.htm";
 
 # my $te = HTML::TableExtract->new(headers => ['SECTOR']);
 my $te = HTML::TableExtract->new();
