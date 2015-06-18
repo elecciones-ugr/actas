@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 use v5.14;
+use utf8;
+use open IO => ':locale';
 
 # use HTML::TableExtract;
 use HTML::TableExtract qw(tree);
@@ -34,7 +36,13 @@ foreach my $ts ($te->tables){
 
     for my $cols (0..$tree->maxcol){
       my $val = $tree->cell($rows,$cols)->as_text;
-      print $val." ";
+      # $val =~ s/^\s+|\s+$| -+$//g;
+      # $val =~ s/ -+$//g;
+      $val =~ s/^\s+|\s+$|\s-\s*+$//g;
+      if ($val ne ""){
+        print Dumper($val);
+        # print $val." ";
+      }
     }
     print "\n";
   }
