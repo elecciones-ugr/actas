@@ -38,4 +38,5 @@ foreach my $ts ($te->tables){
     }
     print "\n";
   }
+  print "-------------";
 }
