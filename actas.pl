@@ -30,16 +30,16 @@ for my $f (@$filas ) {
       if ($este_acta ) {
 	push @actas, $este_acta;
       }
-      $este_acta = [ $columnas ];
+      $este_acta = [ $f->all_text() ];
     } else {
       if ( $este_acta ) {
-	push @$este_acta, $columnas;
+	push @$este_acta, $f->all_text();
       }
     }
 }
 
 for my $a (@actas ) {
-  my $first = $a->[0];
-  my $second = $a->[1];
-  say $first, $second;
+  say $a->[0], $a->[1];
+
 }
+
