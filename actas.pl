@@ -38,8 +38,21 @@ for my $f (@$filas ) {
     }
 }
 
+say "Sector,Centro,Electores,Votan,Válidas,Nulas,Blancas,Pilar Aranda, Indalecio Sánchez-Montesinos";
 for my $a (@actas ) {
-  say $a->[0], $a->[1];
-
+  my ($sector) = ($a->[0] =~ /SECTOR -\s+(.+)/);
+  shift @$a;
+  my $resto = join("\n",  @$a );
+  my ($centro) = ($resto =~ /^(.+?)\s+electores/gs);
+  $centro =~ s/,/ - /;
+  $centro =~ s/\"//g;
+  my ($electores,$votan,$validas,$nulas,$blancas, 
+      $uno, $pilar, $dos, $indalecio) = ($resto =~ /(\d+)/g );
+  $nulas = $nulas || 0;
+  $blancas = $blancas || 0;
+  $pilar = $pilar || 0;
+  $indalecio = $indalecio || 0;
+  say "\"$sector\",\"$centro\",$electores,$votan,$validas,$nulas,$blancas,$pilar,$indalecio";
 }
-
+#Cuidado: ñapa aquí:
+say "\"Eméritos\",\"Hospital Real\", 10, 10, 10, 0, 1, 7, 2";
