@@ -7,43 +7,39 @@ use utf8;
 use open IO => ':locale';
 
 # use HTML::TableExtract;
-use HTML::TableExtract qw(tree);
+use Mojo::DOM qw(tree);
+use File::Slurp::Tiny qw(read_file);
 
 use Data::Dumper;
 
-my $html = shift || "actas.htm";
+my $html_file = shift || "actas.htm";
 
-# my $te = HTML::TableExtract->new(headers => ['SECTOR']);
-my $te = HTML::TableExtract->new();
-$te->parse_file($html);
+my $html = read_file( $html_file);
 
-# foreach my $ts ($te->table_states) {
-#   my @cells=();
-#
-#   foreach my $row ($ts->rows) {
-#     my $valor = join(',', @$row)."\n";
-#     push @cells,$valor;
-#   }
-#
-#   print @cells;
-# }
+die "Problemas con $html_file" if !$html;
+my $dom = Mojo::DOM->new( $html);
 
-foreach my $ts ($te->tables){
-  my $tree = $ts->tree();
+my $filas = $dom->find( 'tr' );
 
-  foreach my $rows (0..$tree->maxrow){
-    my @cells=();
+my @actas;
 
-    for my $cols (0..$tree->maxcol){
-      my $val = $tree->cell($rows,$cols)->as_text;
-      # $val =~ s/^\s+|\s+$| -+$//g;
-      # $val =~ s/ -+$//g;
-      $val =~ s/^\s+|\s+$|\s-\s*+$//g;
-      if ($val ne ""){
-        print Dumper($val);
-        # print $val." ";
+my $este_acta;
+for my $f (@$filas ) {
+    my $columnas = $f->find('td');
+    if ($f->all_text() =~ /ACTA /) {
+      if ($este_acta ) {
+	push @actas, $este_acta;
+      }
+      $este_acta = [ $columnas ];
+    } else {
+      if ( $este_acta ) {
+	push @$este_acta, $columnas;
       }
     }
-    print "\n";
-  }
+}
+
+for my $a (@actas ) {
+  my $first = $a->[0];
+  my $second = $a->[1];
+  say $first, $second;
 }

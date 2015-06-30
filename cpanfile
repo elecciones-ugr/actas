@@ -1,2 +1,2 @@
-requires 'HTML::TableExtract';
-requires 'HTML::ElementTable';
+requires 'Mojo::DOM';
+requires 'File::Slurp::Tiny';
