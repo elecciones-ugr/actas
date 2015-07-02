@@ -40,7 +40,7 @@ for my $f (@$filas ) {
 
 say "Sector,Centro,Electores,Votan,Válidas,Nulas,Blancas,Pilar Aranda, Indalecio Sánchez-Montesinos";
 for my $a (@actas ) {
-  my ($sector) = ($a->[0] =~ /SECTOR -\s+(.+)/);
+  my ($acta,$sector) = ($a->[0] =~ /ACTA\s+-\s+(\d+\-?\d*)\s+SECTOR\s+-\s+(.+)/);
   shift @$a;
   my $resto = join("\n",  @$a );
   my ($centro) = ($resto =~ /^(.+?)\s+electores/gs);
@@ -52,7 +52,7 @@ for my $a (@actas ) {
   $blancas = $blancas || 0;
   $pilar = $pilar || 0;
   $indalecio = $indalecio || 0;
-  say "\"$sector\",\"$centro\",$electores,$votan,$validas,$nulas,$blancas,$pilar,$indalecio";
+  say "\"$sector\",\"$acta-$centro\",$electores,$votan,$validas,$nulas,$blancas,$pilar,$indalecio";
 }
 #Cuidado: ñapa aquí:
 say "\"Eméritos\",\"Hospital Real\", 10, 10, 10, 0, 1, 7, 2";
